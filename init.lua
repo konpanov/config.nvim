@@ -1,20 +1,15 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
+
 
 vim.keymap.set('t', '<esc><esc>', "<c-\\><c-n>", { desc = 'Exit terminal mode' })
 
--- 123
--- 456123123123123123123123123
--- 123
--- 789123
-vim.keymap.set("n", "<leader>p>", "pgvy")
+vim.keymap.set("v", "P", "pgvy")
 vim.o.shell = "powershell"
-
--- 123
--- 456
--- 789
-
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
@@ -40,6 +35,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+  { 'nvim-tree/nvim-tree.lua', config = true },
 
   {
     -- Autocompletion
@@ -58,7 +54,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim',    opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -355,24 +351,6 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },
@@ -380,5 +358,7 @@ cmp.setup {
   },
 }
 
+local ntree = require("nvim-tree.api")
+vim.keymap.set('n', '<leader>\'', ntree.tree.toggle, { desc = 'Toggle nvim tree' })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

@@ -44,36 +44,18 @@ return {
       end, { desc = 'Format current buffer with LSP' })
     end
 
-    -- Enable the following language servers
-    --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-    --
-    --  Add any additional override configuration in the following tables. They will be passed to
-    --  the `settings` field of the server config. You must look up that documentation yourself.
-    --
-    --  If you want to override the default filetypes that your language server will attach to you can
-    --  define the property 'filetypes' to the map in question.
     local servers = {
-      -- clangd = {},
-      -- gopls = {},
-      -- rust_analyzer = {},
       tsserver = {},
-      -- html = { filetypes = { 'html', 'twig', 'hbs'} },
       emmet_ls = {},
-      -- pyright = {},
       pylsp = {
-        -- formatter options
         black = { enabled = true },
         autopep8 = { enabled = false },
         yapf = { enabled = false },
-        -- linter options
         pylint = { enabled = true, executable = "pylint" },
         pyflakes = { enabled = false },
         pycodestyle = { enabled = false },
-        -- type checker
         pylsp_mypy = { enabled = true },
-        -- auto-completion options
         jedi_completion = { fuzzy = true },
-        -- import sorting
         pyls_isort = { enabled = true },
       },
       clangd = {},
