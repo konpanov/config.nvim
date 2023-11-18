@@ -42,40 +42,13 @@ return {
       vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
         vim.lsp.buf.format()
       end, { desc = 'Format current buffer with LSP' })
+      nmap('<leader>f', vim.lsp.buf.format, '[F]ormat')
     end
 
-    -- Enable the following language servers
-    --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-    --
-    --  Add any additional override configuration in the following tables. They will be passed to
-    --  the `settings` field of the server config. You must look up that documentation yourself.
-    --
-    --  If you want to override the default filetypes that your language server will attach to you can
-    --  define the property 'filetypes' to the map in question.
     local servers = {
-      -- clangd = {},
-      -- gopls = {},
-      -- rust_analyzer = {},
       tsserver = {},
-      -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-      emmet_ls = {},
-      -- pyright = {},
-      pylsp = {
-        -- formatter options
-        black = { enabled = true },
-        autopep8 = { enabled = false },
-        yapf = { enabled = false },
-        -- linter options
-        pylint = { enabled = true, executable = "pylint" },
-        pyflakes = { enabled = false },
-        pycodestyle = { enabled = false },
-        -- type checker
-        pylsp_mypy = { enabled = true },
-        -- auto-completion options
-        jedi_completion = { fuzzy = true },
-        -- import sorting
-        pyls_isort = { enabled = true },
-      },
+      html = {},
+      pylsp = {},
       clangd = {},
       lua_ls = {
         Lua = {
@@ -83,6 +56,18 @@ return {
           telemetry = { enable = false },
         },
       },
+      csharp_ls = {},
+      golangci_lint_ls = {},
+      gopls = {},
+      svelte = {},
+      emmet_language_server = {},
+      biome = {},
+      jsonls = {},
+      -- marksman = {},
+      -- grammarly = {},
+      -- ltex = {},
+      -- remark_ls = {}
+      prosemd_lsp = {},
     }
 
     -- Setup neovim lua configuration
@@ -94,7 +79,6 @@ return {
 
     -- Ensure the servers above are installed
     local mason_lspconfig = require 'mason-lspconfig'
-
     mason_lspconfig.setup {
       ensure_installed = vim.tbl_keys(servers),
     }
