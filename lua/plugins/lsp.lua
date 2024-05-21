@@ -1,10 +1,43 @@
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    { 'williamboman/mason.nvim', config = true },
+    {
+      'williamboman/mason.nvim',
+      -- config = true,
+      opts = {
+        ensure_installed = { 'pyright', 'mypy', 'ruff', 'black' },
+      }
+    },
     'williamboman/mason-lspconfig.nvim',
-    { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
+    {
+      'j-hui/fidget.nvim',
+      tag = 'legacy',
+      opts = {}
+    },
     'folke/neodev.nvim',
+    {
+      'nvimtools/none-ls.nvim',
+      ft = { 'python' },
+      opts = function()
+        local null_ls = require("null-ls")
+        null_ls.setup({
+          sources = {
+            -- null_ls.builtins.diagnostics.pylint.with({
+            --   diagnostics_postprocess = function(diagnostic)
+            --     diagnostic.code = diagnostic.message_id
+            --   end,
+            -- }),
+            null_ls.builtins.formatting.isort,
+            null_ls.builtins.formatting.djhtml,
+            -- null_ls.builtins.diagnostics.flake8,
+            -- null_ls.builtins.diagnostics.mypy,
+            null_ls.builtins.diagnostics.ruff,
+            null_ls.builtins.diagnostics.djlint,
+            null_ls.builtins.formatting.black,
+          },
+        })
+      end
+    }
   },
   config = function()
     local on_attach = function(_, bufnr)
@@ -48,8 +81,19 @@ return {
     local servers = {
       tsserver = {},
       html = {},
-      pylsp = {},
-      clangd = {},
+      pyright = {},
+      -- pylsp = {
+      --   -- formatter options
+      --   black = { enabled = true },
+      --   -- linter options
+      --   pyflakes = { enabled = true },
+      --   -- type checker
+      --   pylsp_mypy = { enabled = true },
+      --   -- auto-completion options
+      --   jedi_completion = { fuzzy = true },
+      --   -- import sorting
+      --   pyls_isort = { enabled = true },
+      -- },
       lua_ls = {
         Lua = {
           workspace = { checkThirdParty = false },
@@ -63,11 +107,6 @@ return {
       emmet_language_server = {},
       biome = {},
       jsonls = {},
-      -- marksman = {},
-      -- grammarly = {},
-      -- ltex = {},
-      -- remark_ls = {}
-      prosemd_lsp = {},
     }
 
     -- Setup neovim lua configuration
@@ -93,5 +132,5 @@ return {
         }
       end
     }
-  end
+  end,
 }
