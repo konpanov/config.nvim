@@ -1,0 +1,2 @@
+[lint]
+ignore = ["ISC001", "COM812"]
