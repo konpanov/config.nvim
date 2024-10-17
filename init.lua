@@ -56,6 +56,8 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     if vim.bo.ft == 'lua' then
       vim.keymap.set('n', '<leader>f', '<cmd>silent make! stylua %<cr>')
+    elseif vim.bo.ft == 'go' then
+      vim.keymap.set('n', '<leader>f', '<cmd>silent make! gofmt -w %<cr>')
     elseif vim.bo.ft == 'python' then
       vim.keymap.set('n', '<leader>f', '<cmd>silent make! ruff format %<cr>')
       -- vim.keymap.set('n', '<leader>ll', '<cmd>silent make! ruff check % --select I --config ./pyproject.toml<cr>')
@@ -68,10 +70,17 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- Git
 vim.keymap.set('n', '<leader>mg', ':silent make! git')
-vim.api.nvim_create_user_command('G', function(opts) vim.cmd('silent make! git ' .. opts.args) end, {nargs="*"})
+gitcommand = function(opts)
+	if opts and opts.args and opts.args == "" then
+		opts.args = "status"
+	end
+	vim.cmd('silent make! git ' .. opts.args)
+end
+vim.api.nvim_create_user_command('G', gitcommand, {nargs="*"})
 vim.keymap.set('n', '<leader>gs', '<cmd>silent make! git status<cr>')
 
 -- Diagnostic keymaps
+--
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -80,3 +89,14 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 
 hl_on_yank = function() vim.highlight.on_yank() end
 vim.api.nvim_create_autocmd('TextYankPost', { callback = hl_on_yank })
+
+
+
+if vim.fn.filereadable("session.lua") == 1 then
+	vim.cmd "source session.lua"
+end
+
+if vim.fn.filereadable("Session.vim") == 1 then
+	vim.cmd "source Session.vim"
+end
+
